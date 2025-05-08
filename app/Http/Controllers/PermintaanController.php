@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Alasan;
+use App\Models\Permintaan;
 use Illuminate\Http\Request;
 
 class PermintaanController extends Controller
@@ -13,12 +15,19 @@ class PermintaanController extends Controller
 
     public function create()
     {
-        return view('permintaan.create');
+        $alasans = Alasan::all();
+        return view('permintaan.create', compact('alasans'));
     }
 
     public function store(Request $request)
     {
-        // Logic to store the request
+        $validated = $request->validate([
+            'content' => 'required|string',
+            'alasan_id' => 'required|exists:alasans,id',
+        ]);
+
+        Permintaan::create($request->all());
+
         return redirect()->route('permintaan.index');
     }
 

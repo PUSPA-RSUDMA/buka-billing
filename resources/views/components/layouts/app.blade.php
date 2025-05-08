@@ -16,5 +16,7 @@
         @endif
 
         {{ $slot }}
+
+        {{ $scripts ?? '' }}
     </flux:main>
 </x-layouts.app.sidebar>
