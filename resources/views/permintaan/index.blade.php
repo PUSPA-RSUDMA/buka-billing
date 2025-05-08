@@ -24,15 +24,31 @@
                                 <td>{{ $permintaan->no_register }}</td>
                                 <td>{{ $permintaan->alasan->label }}</td>
                                 <td>
-                                    @if ($permintaan->status == 'baru')
-                                        <a class="btn btn-outline btn-xs btn-secondary" onclick="my_modal_2.showModal()">{{ $permintaan->status }}</a>
-                                    @elseif($permintaan->status == 'proses')
-                                        <a class="btn btn-outline btn-xs btn-warning" onclick="my_modal_2.showModal()">{{ $permintaan->status }}</a>
-                                    @else
-                                        <a class="btn btn-outline btn-xs btn-success" onclick="my_modal_2.showModal()" data-status="{{ $permintaan->status }}" data-perubahan="{{ $permintaan->perubahan }}">{{ $permintaan->status }}</a>
-                                    @endif
+                                    @php
+                                        $btnClass = match($permintaan->status) {
+                                            'baru' => 'btn-secondary',
+                                            'proses' => 'btn-warning',
+                                            default => 'btn-success',
+                                        };
+                                    @endphp
+
+                                    <a class="btn btn-outline btn-xs {{ $btnClass }}"
+                                    onclick="openModal(this)"
+                                    data-id="{{ $permintaan->id }}"
+                                    data-status="{{ $permintaan->status }}"
+                                    data-perubahan="{{ $permintaan->perubahan }}">
+                                        {{ $permintaan->status }}
+                                    </a>
                                 </td>
-                                <td><a href="{{ route('permintaan.index') }}" class="btn btn-sm btn-error">Hapus</a></td>
+                                <td>
+                                    <td>
+                                        <form action="{{ route('permintaan.destroy', $permintaan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus permintaan ini?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-xs btn-error">Hapus</button>
+                                        </form>
+                                    </td>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>
@@ -46,11 +62,39 @@
     </div>
     <dialog id="my_modal_2" class="modal">
         <div class="modal-box">
-            <h3 class="text-lg font-bold">Hello!</h3>
-            <p class="py-4">Press ESC key or click outside to close</p>
+            <h3 class="text-lg font-bold">Detail Permintaan</h3>
+            <p class="py-2"><strong>Status:</strong> <span id="modal-status"></span></p>
+            <p class="py-2"><strong>Perubahan:</strong></p>
+            <div id="modal-perubahan" class="bg-base-200 p-2 rounded text-sm"></div>
+            <div class="modal-action">
+                <form id="form-selesai" method="POST" action="{{ route('permintaan.selesai', ['id' => 'ID_PLACEHOLDER']) }}">
+                    @csrf
+                    @method('PUT')
+                    <input type="hidden" name="id" id="input-id">
+                    <button class="btn btn-sm btn-success" type="submit">Selesai</button>
+                    <button type="button" class="btn btn-sm" onclick="my_modal_2.close()">Tutup</button>
+                </form>
+            </div>
         </div>
         <form method="dialog" class="modal-backdrop">
             <button>close</button>
         </form>
     </dialog>
+    <script>
+        function openModal(button) {
+            const status = button.getAttribute('data-status');
+            const perubahan = button.getAttribute('data-perubahan');
+            const id = button.getAttribute('data-id');
+
+            document.getElementById('modal-status').textContent = status;
+            document.getElementById('modal-perubahan').innerHTML = perubahan;
+
+            document.getElementById('input-id').value = id;
+
+            const formAction = '{{ route('permintaan.selesai', ['id' => '__ID__']) }}';
+            document.getElementById('form-selesai').action = formAction.replace('__ID__', id);
+
+            my_modal_2.showModal();
+        }
+    </script>
 </x-layouts.app>
