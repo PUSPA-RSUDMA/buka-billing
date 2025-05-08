@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('permintaans', function (Blueprint $table) {
             $table->id();
-            $table->date('tanggal');
+            $table->string('no_register', 50);
             $table->text('perubahan');
             $table->enum('status', ['baru', 'proses', 'selesai'])->default('baru');
             $table->foreignId('alasan_id')->references('id')->on('alasans');
