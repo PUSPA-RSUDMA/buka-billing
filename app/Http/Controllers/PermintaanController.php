@@ -21,7 +21,7 @@ class PermintaanController extends Controller
             $q->where('status', $status);
         }
 
-        $permintaans = $q->paginate(10);
+        $permintaans = $q->orderBy('created_at', 'desc')->paginate(10);
 
         return view('permintaan.index', compact('permintaans', 'alasans'));
     }
@@ -64,7 +64,17 @@ class PermintaanController extends Controller
 
     public function destroy($id)
     {
-        // Logic to delete the request
+        $permintaan = Permintaan::findOrFail($id);
+        $permintaan->delete();
         return redirect()->route('permintaan.index');
+    }
+
+    public function selesai($id, Request $request)
+    {
+        $permintaan = Permintaan::findOrFail($id);
+        $permintaan->status = 'selesai';
+        $permintaan->save();
+
+        return redirect()->back()->with('success', 'Permintaan berhasil diselesaikan.');
     }
 }
