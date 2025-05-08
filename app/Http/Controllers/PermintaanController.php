@@ -10,7 +10,7 @@ class PermintaanController extends Controller
 {
     public function index()
     {
-       $permintaans = Permintaan::all();
+       $permintaans = Permintaan::with('alasan')->paginate(5);
         return view('permintaan.index', compact('permintaans'));
     }
 
