@@ -92,7 +92,7 @@
                     @csrf
                     @method('PUT')
                     <input type="hidden" name="id" id="input-id">
-                    <button class="btn btn-sm btn-success" type="submit">Selesai</button>
+                    <button class="btn btn-sm btn-success" type="submit" id="btn-selesai">Selesai</button>
                     <button type="button" class="btn btn-sm" onclick="my_modal_2.close()">Tutup</button>
                 </form>
             </div>
@@ -110,10 +110,16 @@
             document.getElementById('modal-status').textContent = status;
             document.getElementById('modal-perubahan').innerHTML = perubahan;
 
-            document.getElementById('input-id').value = id;
+            if (status === 'selesai') {
+                document.getElementById('btn-selesai').style.display = "none";
+            }else{
+                document.getElementById('btn-selesai').style.display = 'inline';
+                document.getElementById('input-id').value = id;
 
-            const formAction = '{{ route('permintaan.selesai', ['id' => '__ID__']) }}';
-            document.getElementById('form-selesai').action = formAction.replace('__ID__', id);
+                const formAction = '{{ route('permintaan.selesai', ['id' => '__ID__']) }}';
+                document.getElementById('form-selesai').action = formAction.replace('__ID__', id);
+
+            }
 
             my_modal_2.showModal();
         }
