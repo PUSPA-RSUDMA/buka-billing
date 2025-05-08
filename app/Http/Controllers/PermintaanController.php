@@ -22,14 +22,15 @@ class PermintaanController extends Controller
 
     public function store(Request $request)
     {
-        $validated = $request->validate([
+        $request->validate([
+            'no_register' => 'required|string',
             'perubahan' => 'required|string',
             'alasan_id' => 'required|exists:alasans,id',
         ]);
 
-        Permintaan::create($validated);
+        Permintaan::create($request->all());
 
-        return redirect()->route('permintaan.index');
+        return to_route('permintaan.index');
     }
 
     public function show($id)
