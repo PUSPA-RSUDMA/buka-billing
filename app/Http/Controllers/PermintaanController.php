@@ -10,7 +10,8 @@ class PermintaanController extends Controller
 {
     public function index()
     {
-        return view('permintaan.index');
+       $permintaans = Permintaan::all();
+        return view('permintaan.index', compact('permintaans'));
     }
 
     public function create()
@@ -22,11 +23,11 @@ class PermintaanController extends Controller
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'content' => 'required|string',
+            'perubahan' => 'required|string',
             'alasan_id' => 'required|exists:alasans,id',
         ]);
 
-        Permintaan::create($request->all());
+        Permintaan::create($validated);
 
         return redirect()->route('permintaan.index');
     }

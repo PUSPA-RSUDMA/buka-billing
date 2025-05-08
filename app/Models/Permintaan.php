@@ -7,8 +7,6 @@ use Illuminate\Support\Str;
 
 class Permintaan extends Model
 {
-    protected $keyType = 'string';
-
     protected $guarded = [
         'id'
     ];
@@ -20,5 +18,10 @@ class Permintaan extends Model
                 $permintaan->created_by = auth()->id();
             }
         });
+    }
+
+    public function alasan()
+    {
+        return $this->belongsTo(Alasan::class);
     }
 }
