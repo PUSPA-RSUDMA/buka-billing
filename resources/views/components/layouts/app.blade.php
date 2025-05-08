@@ -11,7 +11,7 @@
                 @if ($subheading)
                     <flux:subheading size="lg">{{ $subheading }}</flux:subheading>
                 @endif
-                <flux:separator variant="subtle" class="mt-6" />
+                {{-- <flux:separator variant="subtle" class="mt-6" /> --}}
             </div>
         @endif
 
