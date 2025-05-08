@@ -1,22 +1,20 @@
 <x-layouts.app title="Permintaan" heading="Permintaan" subheading="Daftar permintaan perubahan">
     <div class="flex flex-col gap-4">
         <div class="flex flex-col md:flex-row justify-between gap-4">
-            <div>
-                <form action="" method="get" class="flex gap-4">
-                    <select name="alasan_id" class="select">
-                        <option value="">Semua Revisi</option>
-                        @foreach ($alasans as $alasan)
-                            <option value="{{ $alasan->id }}" @selected(request('alasan_id') == $alasan->id)>{{ $alasan->label }}</option>
-                        @endforeach
-                    </select>
-                    <select name="status" class="select">
-                        <option value="">Semua Status</option>
-                        <option value="baru" @selected(request('status') == 'baru')>Baru</option>
-                        <option value="selesai" @selected(request('status') == 'selesai')>Selesai</option>
-                    </select>
-                    <button type="submit" class="btn btn-square btn-primary"><i class="ti ti-search text-xl"></i></button>
-                </form>
-            </div>
+            <form action="" method="get" class="gap-4 grid grid-cols-2 md:grid-cols-6">
+                <select name="alasan_id" class="select" onchange="this.form.submit()">
+                    <option value="">Semua Revisi</option>
+                    @foreach ($alasans as $alasan)
+                        <option value="{{ $alasan->id }}" @selected(request('alasan_id') == $alasan->id)>{{ $alasan->label }}</option>
+                    @endforeach
+                </select>
+                <select name="status" class="select" onchange="this.form.submit()">
+                    <option value="">Semua Status</option>
+                    <option value="baru" @selected(request('status') == 'baru')>Baru</option>
+                    <option value="selesai" @selected(request('status') == 'selesai')>Selesai</option>
+                </select>
+                {{-- <button type="submit" class="btn btn-square btn-primary"><i class="ti ti-search text-xl"></i></button> --}}
+            </form>
             <div class="justify-end card-actions">
                 <a href="{{ route('permintaan.create') }}" class="btn btn-square btn-primary"> <i class="ti ti-plus text-xl"></i></a>
             </div>
@@ -29,6 +27,7 @@
                         <thead>
                             <tr>
                                 <th class="w-4">No</th>
+                                <th>User</th>
                                 <th>No Register</th>
                                 <th>Revisi</th>
                                 <th>Status</th>
@@ -39,6 +38,7 @@
                             @foreach ($permintaans as $index => $permintaan)
                                 <tr>
                                     <th>{{ $permintaans->firstItem() + $index }}</th>
+                                    <td>{{ $permintaan->user->name }}</td>
                                     <td>{{ $permintaan->no_register }}</td>
                                     <td>{{ $permintaan->alasan->label }}</td>
                                     <td>
