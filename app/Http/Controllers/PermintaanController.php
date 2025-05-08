@@ -10,13 +10,26 @@ class PermintaanController extends Controller
 {
     public function index()
     {
-       $permintaans = Permintaan::with('alasan')->orderBy('id', 'desc')->paginate(5);
-        return view('permintaan.index', compact('permintaans'));
+        $alasans = Alasan::all();
+
+        $q = Permintaan::with('alasan');
+
+        if ($alasan_id = request('alasan_id')) {
+            $q->where('alasan_id', $alasan_id);
+        }
+        if ($status = request('status')) {
+            $q->where('status', $status);
+        }
+
+        $permintaans = $q->paginate(10);
+
+        return view('permintaan.index', compact('permintaans', 'alasans'));
     }
 
     public function create()
     {
         $alasans = Alasan::all();
+
         return view('permintaan.create', compact('alasans'));
     }
 
