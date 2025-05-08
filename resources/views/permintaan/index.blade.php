@@ -1,4 +1,4 @@
-<x-layouts.app title="Dashboard" heading="asdasd" subheading="asdasdxxxx x x x x x x ">
+<x-layouts.app title="Permintaan" heading="Permintaan" subheading="Daftar permintaan perubahan">
 
     <div class="grid auto-rows-min gap-4 md:grid-cols-3">
         <div class="card bg-base-100 shadow">
