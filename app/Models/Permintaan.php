@@ -3,12 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Str;
 
 class Permintaan extends Model
 {
     protected $guarded = [
-        'id'
+        'id',
     ];
 
     protected static function booted()
