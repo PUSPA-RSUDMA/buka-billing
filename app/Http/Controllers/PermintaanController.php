@@ -73,6 +73,8 @@ class PermintaanController extends Controller
     {
         $permintaan = Permintaan::findOrFail($id);
         $permintaan->status = 'selesai';
+        $permintaan->processed_by = auth()->id();
+        $permintaan->processed_at = now();
         $permintaan->save();
 
         return redirect()->back()->with('success', 'Permintaan berhasil diselesaikan.');
