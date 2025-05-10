@@ -1,12 +1,12 @@
 <x-layouts.app title="Permintaan" heading="Permintaan" subheading="Tambah permintaan perubahan baru">
 
-    <div class="card bg-base-100 shadow">
+    <div class="card bg-base-100 shadow lg:w-1/2">
         <div class="card-body">
             <form action="{{ route('permintaan.store') }}" method="POST">
                 @csrf
                 <fieldset class="fieldset">
                     <legend class="fieldset-legend">No Register</legend>
-                    <input type="text" name="no_register" class="input" />
+                    <input type="text" name="no_register" class="input" value="{{ old('no_register') }}" />
                     <flux:error name="no_register" />
                 </fieldset>
                 <fieldset class="fieldset">
@@ -20,8 +20,8 @@
                     <div class="flex flex-col gap-1">
                         @foreach ($alasans as $alasan)
                             <label class="flex items-center gap-1 cursor-pointer">
-                                <input type="radio" name="alasan_id" class="radio radio-xs" value="{{ $alasan->id }}" />
-                                <span class="label-text">{{ $alasan->label }}</span>
+                                <input type="radio" name="alasan_id" class="radio radio-sm" value="{{ $alasan->id }}" />
+                                <span class="text-sm ">{{ $alasan->label }}</span>
                             </label>
                         @endforeach
                     </div>

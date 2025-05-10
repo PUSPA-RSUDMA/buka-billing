@@ -14,6 +14,13 @@ class PermintaanController extends Controller
 
         $q = Permintaan::with('alasan');
 
+        if (auth()->user()->hasRole('user')) {
+            $q->whereCreatedBy(auth()->id());
+        }
+
+        if ($tanggal = request('tanggal')) {
+            $q->where('created_at', 'like', $tanggal.'%');
+        }
         if ($alasan_id = request('alasan_id')) {
             $q->where('alasan_id', $alasan_id);
         }
