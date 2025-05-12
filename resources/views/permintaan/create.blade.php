@@ -6,7 +6,7 @@
                 @csrf
                 <fieldset class="fieldset">
                     <legend class="fieldset-legend">No Register</legend>
-                    <input type="text" name="no_register" class="input" value="{{ old('no_register') }}" />
+                    <input type="text" name="no_register" class="input" value="{{ old('no_register') }}" required />
                     <flux:error name="no_register" />
                 </fieldset>
                 <fieldset class="fieldset">
@@ -20,7 +20,7 @@
                     <div class="flex flex-col gap-1">
                         @foreach ($alasans as $alasan)
                             <label class="flex items-center gap-1 cursor-pointer">
-                                <input type="radio" name="alasan_id" class="radio radio-sm" value="{{ $alasan->id }}" />
+                                <input type="radio" name="alasan_id" class="radio radio-sm" value="{{ $alasan->id }}" checked required />
                                 <span class="text-sm ">{{ $alasan->label }}</span>
                             </label>
                         @endforeach

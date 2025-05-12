@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\StatusEnum;
 use App\Models\Alasan;
 use App\Models\Permintaan;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PermintaanController extends Controller
@@ -11,6 +13,7 @@ class PermintaanController extends Controller
     public function index()
     {
         $alasans = Alasan::all();
+        $admins =  User::role('admin')->get();
 
         $q = Permintaan::with('alasan');
 
@@ -19,7 +22,7 @@ class PermintaanController extends Controller
         }
 
         if ($tanggal = request('tanggal')) {
-            $q->where('created_at', 'like', $tanggal.'%');
+            $q->where('created_at', 'like', $tanggal . '%');
         }
         if ($alasan_id = request('alasan_id')) {
             $q->where('alasan_id', $alasan_id);
@@ -27,10 +30,13 @@ class PermintaanController extends Controller
         if ($status = request('status')) {
             $q->where('status', $status);
         }
+        if ($processed_by = request('processed_by')) {
+            $q->where('processed_by', $processed_by);
+        }
 
         $permintaans = $q->orderBy('created_at', 'desc')->paginate(10);
 
-        return view('permintaan.index', compact('permintaans', 'alasans'));
+        return view('permintaan.index', compact('permintaans', 'alasans', 'admins'));
     }
 
     public function create()
@@ -76,14 +82,17 @@ class PermintaanController extends Controller
         return redirect()->route('permintaan.index');
     }
 
-    public function selesai($id, Request $request)
+    public function selesai(Permintaan $permintaan)
     {
-        $permintaan = Permintaan::findOrFail($id);
-        $permintaan->status = 'selesai';
-        $permintaan->processed_by = auth()->id();
-        $permintaan->processed_at = now();
+        if ($permintaan->status == StatusEnum::BARU->value) {
+            $permintaan->status = StatusEnum::PROSES->value;
+            $permintaan->processed_by = auth()->id();
+            $permintaan->processed_at = now();
+        } else {
+            $permintaan->status = StatusEnum::SELESAI->value;
+        }
         $permintaan->save();
 
-        return redirect()->back()->with('success', 'Permintaan berhasil diselesaikan.');
+        return redirect()->back()->with('success', 'Permintaan berhasil diselesaikan');
     }
 }

@@ -22,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('settings/appearance', Appearance::class)->name('settings.appearance');
 
     Route::resource('permintaan', PermintaanController::class);
-    Route::put('permintaan/{id}/selesai', [PermintaanController::class, 'selesai'])->name('permintaan.selesai');
+    Route::put('permintaan/{permintaan}/selesai', [PermintaanController::class, 'selesai'])->name('permintaan.selesai');
 });
 
 require __DIR__.'/auth.php';

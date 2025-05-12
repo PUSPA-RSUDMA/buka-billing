@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Model;
 
 class Permintaan extends Model
@@ -27,5 +28,9 @@ class Permintaan extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'created_by');
+    }
+
+    public function getStatusLabelAttribute(){
+        return StatusEnum::label($this->status);
     }
 }
