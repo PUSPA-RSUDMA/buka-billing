@@ -4,11 +4,11 @@
         <div class="card-body">
             <form action="{{ route('permintaan.store') }}" method="POST">
                 @csrf
-                <fieldset class="fieldset">
-                    <legend class="fieldset-legend">No Register</legend>
+                <div>
+                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No Register</label>
                     <input type="text" name="no_register" class="input" value="{{ old('no_register') }}" required />
                     <flux:error name="no_register" />
-                </fieldset>
+                </div>
                 <fieldset class="fieldset">
                     <legend class="fieldset-legend">Perubahan</legend>
                     <textarea id="perubahan" name="perubahan"></textarea>
