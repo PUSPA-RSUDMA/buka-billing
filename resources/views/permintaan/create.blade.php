@@ -1,22 +1,24 @@
 <x-layouts.app title="Permintaan" heading="Permintaan" subheading="Tambah permintaan perubahan baru">
 
-    <div class="card bg-base-100 shadow lg:w-1/2">
+    <div class="card border lg:w-1/2">
         <div class="card-body">
-            <form action="{{ route('permintaan.store') }}" method="POST">
+             <h2 class="card-title">Form</h2>
+            <form action="{{ route('permintaan.store') }}" method="POST" class="form">
                 @csrf
                 <div>
-                    <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">No Register</label>
+                    <label class="input-label">No Register</label>
                     <input type="text" name="no_register" class="input" value="{{ old('no_register') }}" required />
                     <flux:error name="no_register" />
                 </div>
-                <fieldset class="fieldset">
-                    <legend class="fieldset-legend">Perubahan</legend>
-                    <textarea id="perubahan" name="perubahan"></textarea>
-                    <flux:error name="perubahan" />
-                </fieldset>
 
-                <fieldset class="fieldset">
-                    <legend class="fieldset-legend">Revisi Oleh</legend>
+                <div>
+                    <label class="input-label">Perubahan</label>
+                    <textarea name="perubahan" class="textarea" rows="5" placeholder="Buka tindakan, buka farmasi / 2025-04-01"></textarea>
+                    <flux:error name="perubahan" />
+                </div>
+
+                <div>
+                    <label class="input-label">Revisi Oleh</label>
                     <div class="flex flex-col gap-1">
                         @foreach ($alasans as $alasan)
                             <label class="flex items-center gap-1 cursor-pointer">
@@ -26,37 +28,12 @@
                         @endforeach
                     </div>
                     <flux:error name="alasan_id" />
-
-                </fieldset>
+                </div>
 
                 <div class="flex justify-end mt-4">
-                    <button type="submit" class="btn btn-primary">Simpan</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Simpan</button>
                 </div>
             </form>
         </div>
     </div>
-
-    <script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
-    <script>
-        ClassicEditor
-            .create(document.querySelector('#perubahan'), {
-                toolbar: [
-                    'undo',
-                    'redo'
-                ]
-            })
-            .then(editor => {
-                editor.setData(`
-                    <p>Tindakan : </p>
-                    <p>Farmasi : </p>
-                    <p>Askep : </p>
-                    <p>Radiologi : </p>
-                    <p>Lab : </p>
-                    <p>Lainnya : </p>
-                `);
-            })
-            .catch(error => {
-                console.error(error);
-            });
-    </script>
 </x-layouts.app>

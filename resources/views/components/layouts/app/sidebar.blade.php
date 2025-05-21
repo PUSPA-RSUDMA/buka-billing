@@ -15,8 +15,8 @@
                 <flux:navlist.group heading="Home" class="grid">
                     <flux:navlist.item icon="home" :href="route('dashboard')" :current="request()->routeIs('dashboard')" wire:navigate>{{ __('Dashboard') }}</flux:navlist.item>
                 </flux:navlist.group>
-                <flux:navlist.group heading="Permintaan" class="grid mt-8">
-                    <flux:navlist.item :href="route('permintaan.index')" :current="request()->routeIs('permintaan.index')" wire:navigate>{{ __('Permintaan Perubahan') }}</flux:navlist.item>
+                <flux:navlist.group heading="Permintaan" class="grid">
+                    <flux:navlist.item :href="url('permintaan')" :current="request()->segment(1) === 'permintaan'" wire:navigate>Permintaan Perubahan </flux:navlist.item>
                 </flux:navlist.group>
             </flux:navlist>
 

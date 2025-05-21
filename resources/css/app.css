@@ -65,3 +65,14 @@ select:focus[data-flux-control] {
 /* \[:where(&)\]:size-4 {
     @apply size-4;
 } */
+
+@layer base {
+    label.input-label {
+        @apply block mb-2 text-xs font-medium text-gray-900 dark:text-white
+    }
+
+    form.form{
+        @apply grid gap-4
+    }
+    
+}

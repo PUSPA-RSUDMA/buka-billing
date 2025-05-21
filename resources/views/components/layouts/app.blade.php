@@ -7,7 +7,7 @@
     <flux:main>
         @if ($heading)
             <div class="relative mb-6 w-full">
-                <flux:heading size="xl" level="1">{{ $heading }}</flux:heading>
+                <flux:heading size="xl" class="text-xl" level="1">{{ $heading }}</flux:heading>
                 @if ($subheading)
                     <flux:subheading size="lg">{{ $subheading }}</flux:subheading>
                 @endif

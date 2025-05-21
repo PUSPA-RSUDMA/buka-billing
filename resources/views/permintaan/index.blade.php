@@ -1,21 +1,22 @@
 <x-layouts.app title="Permintaan" heading="Permintaan" subheading="Daftar permintaan perubahan">
+
     <div class="flex flex-col gap-4">
         <div class="flex flex-col md:flex-row justify-between gap-4">
             <form action="" method="get" class="gap-4 grid grid-cols-2 md:grid-cols-6">
-                <input type="date" class="input" name="tanggal" value="{{ request('tanggal') }}" onchange="this.form.submit()">
-                <select name="processed_by" class="select" onchange="this.form.submit()">
+                <input type="date" class="input input-sm" name="tanggal" value="{{ request('tanggal') }}" onchange="this.form.submit()">
+                <select name="processed_by" class="select input-sm" onchange="this.form.submit()">
                     <option value="">Semua IT</option>
                     @foreach ($admins as $admin)
                         <option value="{{ $admin->id }}" @selected(request('processed_by') == $admin->id)>{{ $admin->name }}</option>
                     @endforeach
                 </select>
-                <select name="alasan_id" class="select" onchange="this.form.submit()">
+                <select name="alasan_id" class="select input-sm" onchange="this.form.submit()">
                     <option value="">Semua Revisi</option>
                     @foreach ($alasans as $alasan)
                         <option value="{{ $alasan->id }}" @selected(request('alasan_id') == $alasan->id)>{{ $alasan->label }}</option>
                     @endforeach
                 </select>
-                <select name="status" class="select" onchange="this.form.submit()">
+                <select name="status" class="select input-sm" onchange="this.form.submit()">
                     <option value="">Semua Status</option>
                     <option value="baru" @selected(request('status') == 'baru')>Baru</option>
                     <option value="proses" @selected(request('status') == 'proses')>Sudah Dibuka</option>
@@ -24,12 +25,13 @@
                 {{-- <button type="submit" class="btn btn-square btn-primary"><i class="ti ti-search text-xl"></i></button> --}}
             </form>
             <div class="justify-end card-actions">
-                <a href="{{ route('permintaan.create') }}" class="btn btn-square btn-primary"> <i class="ti ti-plus text-xl"></i></a>
+                <a href="{{ route('permintaan.create') }}" class="btn btn-square btn-primary" wire:navigate> <i class="ti ti-plus text-xl"></i></a>
             </div>
         </div>
-        <div class="card bg-base-100 border border-zinc-200 shadow">
-            <div class="card-body p-1">
-                <div class="overflow-x-auto rounded">
+
+        <div class="card border">
+            <div class="card-body p-0">
+                <div class="overflow-x-auto rounded-lg">
                     <table class="table table-sm border-b">
                         <thead>
                             <tr class="bg-base-200">
@@ -45,21 +47,21 @@
                         <tbody>
                             @foreach ($permintaans as $index => $permintaan)
                                 <tr class="hover:bg-gray-50">
-                                    <th>{{ $permintaans->firstItem() + $index }}</th>
-                                    <th>{{ $permintaan->created_at }}</th>
+                                    <td>{{ $permintaans->firstItem() + $index }}</td>
+                                    <td>{{ $permintaan->created_at }}</td>
                                     <td>{{ $permintaan->user->name }}</td>
                                     <td>{{ $permintaan->no_register }}</td>
                                     <td>{{ $permintaan->alasan->label }}</td>
                                     <td>
                                         @php
                                             $btnClass = match ($permintaan->status) {
-                                                'baru' => 'badge-secondary',
-                                                'proses' => 'badge-warning',
-                                                default => 'badge-success',
+                                                'baru' => 'btn-info',
+                                                'proses' => 'btn-warning',
+                                                default => 'btn-success',
                                             };
                                         @endphp
 
-                                        <a class="badge badge-outline {{ $btnClass }} cursor-pointer" onclick="openModal(this)" data-id="{{ $permintaan->id }}" data-status="{{ $permintaan->status }}" data-perubahan="{{ $permintaan->perubahan }}">
+                                        <a class="btn btn-soft btn-sm {{ $btnClass }} cursor-pointer" onclick="openModal(this)" data-id="{{ $permintaan->id }}" data-status="{{ $permintaan->status }}" data-perubahan="{{ $permintaan->perubahan }}">
                                             {{ $permintaan->status_label }}
                                         </a>
                                     </td>
@@ -68,7 +70,7 @@
                                             <form action="{{ route('permintaan.destroy', $permintaan->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus permintaan ini?');">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn  btn-error">Hapus</button>
+                                                <button type="submit" class="btn btn-soft btn-sm btn-error">Hapus</button>
                                             </form>
                                         @endif
                                     </td>
