@@ -1,30 +1,43 @@
 <x-layouts.app title="Permintaan" heading="Permintaan" subheading="Daftar permintaan perubahan">
 
     <div class="flex flex-col gap-4">
-        <div class="flex flex-col md:flex-row justify-between gap-4">
-            <form action="" method="get" class="gap-4 grid grid-cols-2 md:grid-cols-6">
-                <input type="date" class="input input-sm" name="tanggal" value="{{ request('tanggal') }}" onchange="this.form.submit()">
-                <select name="processed_by" class="select input-sm" onchange="this.form.submit()">
-                    <option value="">Semua IT</option>
-                    @foreach ($admins as $admin)
-                        <option value="{{ $admin->id }}" @selected(request('processed_by') == $admin->id)>{{ $admin->name }}</option>
-                    @endforeach
-                </select>
-                <select name="alasan_id" class="select input-sm" onchange="this.form.submit()">
-                    <option value="">Semua Revisi</option>
-                    @foreach ($alasans as $alasan)
-                        <option value="{{ $alasan->id }}" @selected(request('alasan_id') == $alasan->id)>{{ $alasan->label }}</option>
-                    @endforeach
-                </select>
-                <select name="status" class="select input-sm" onchange="this.form.submit()">
-                    <option value="">Semua Status</option>
-                    <option value="baru" @selected(request('status') == 'baru')>Baru</option>
-                    <option value="proses" @selected(request('status') == 'proses')>Sudah Dibuka</option>
-                    <option value="selesai" @selected(request('status') == 'selesai')>Selesai</option>
-                </select>
+        <div class="flex flex-col justify-between gap-4 md:flex-row">
+            <form action="" method="get" class="grid grid-cols-2 gap-4 md:grid-cols-6">
+                <label class="floating-label">
+                    <input type="date" class="input input-sm" name="tanggal" value="{{ request('tanggal') }}" onchange="this.form.submit()">
+                    <span>Tanggal</span>
+                </label>
+                <label class="floating-label">
+                    <select name="processed_by" class="select input-sm" onchange="this.form.submit()">
+                        <option value="">Semua IT</option>
+                        @foreach ($admins as $admin)
+                            <option value="{{ $admin->id }}" @selected(request('processed_by') == $admin->id)>{{ $admin->name }}</option>
+                        @endforeach
+                    </select>
+                    <span>IT</span>
+                </label>
+                <label class="floating-label">
+                    <select name="alasan_id" class="select input-sm" onchange="this.form.submit()">
+                        <option value="">Semua Revisi</option>
+                        @foreach ($alasans as $alasan)
+                            <option value="{{ $alasan->id }}" @selected(request('alasan_id') == $alasan->id)>{{ $alasan->label }}</option>
+                        @endforeach
+                    </select>
+                    <span>Revisi</span>
+                </label>
+                <label class="floating-label">
+                    <select name="status" class="select input-sm" onchange="this.form.submit()">
+                        <option value="">Semua Status</option>
+                        <option value="baru" @selected(request('status') == 'baru')>Baru</option>
+                        <option value="proses" @selected(request('status') == 'proses')>Sudah Dibuka</option>
+                        <option value="selesai" @selected(request('status') == 'selesai')>Selesai</option>
+                    </select>
+                    <span>Status</span>
+                </label>
+
                 {{-- <button type="submit" class="btn btn-square btn-primary"><i class="ti ti-search text-xl"></i></button> --}}
             </form>
-            <div class="justify-end card-actions">
+            <div class="card-actions justify-end">
                 <a href="{{ route('permintaan.create') }}" class="btn btn-square btn-primary" wire:navigate> <i class="ti ti-plus text-xl"></i></a>
             </div>
         </div>
@@ -61,7 +74,7 @@
                                             };
                                         @endphp
 
-                                        <a class="btn btn-soft btn-sm {{ $btnClass }} cursor-pointer" onclick="openModal(this)" data-id="{{ $permintaan->id }}" data-status="{{ $permintaan->status }}" data-perubahan="{{ $permintaan->perubahan }}">
+                                        <a class="btn btn-soft btn-sm {{ $btnClass }} cursor-pointer" onclick="openModal(this)" data-id="{{ $permintaan->id }}" data-status="{{ $permintaan->status }}" data-tanggal="{{ $permintaan->created_at }}" data-perubahan="{{ $permintaan->perubahan }}">
                                             {{ $permintaan->status_label }}
                                         </a>
                                     </td>
@@ -79,7 +92,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="px-3 p-2">
+                <div class="p-2 px-3">
                     {{ $permintaans->links() }}
                 </div>
             </div>
@@ -88,10 +101,11 @@
 
     <dialog id="my_modal_2" class="modal">
         <div class="modal-box">
-            <h3 class="text-lg font-bold">Detail Permintaan</h3>
-            <p class="py-2"><strong>Status:</strong> <span id="modal-status"></span></p>
-            <p class="py-2"><strong>Perubahan:</strong></p>
-            <div id="modal-perubahan" class="bg-base-200 p-2 rounded text-sm"></div>
+            <div class="text-lg font-bold mb-2">Perubahan
+                <div class="badge badge-soft badge-primary uppercase text-xs" id="label-status"></div>
+            </div>
+            <div id="label-tanggal" class="bg-base-200 rounded p-2 text-sm"></div>
+            <div id="label-perubahan" class="bg-base-200 rounded p-2 text-sm"></div>
             <div class="modal-action">
                 <form id="form-selesai" method="POST" action="{{ route('permintaan.selesai', ['permintaan' => 'ID_PLACEHOLDER']) }}">
                     @csrf
@@ -111,11 +125,13 @@
     <script>
         function openModal(button) {
             const status = button.getAttribute('data-status');
+            const tanggal = button.getAttribute('data-tanggal');
             const perubahan = button.getAttribute('data-perubahan');
             const id = button.getAttribute('data-id');
 
-            document.getElementById('modal-status').textContent = status;
-            document.getElementById('modal-perubahan').innerHTML = perubahan;
+            document.getElementById('label-status').textContent = status;
+            document.getElementById('label-perubahan').innerHTML = perubahan;
+            document.getElementById('label-tanggal').innerHTML = tanggal;
 
             var btn_label = (status == 'baru' ? 'Buka Billing' : 'Tutup Billing')
 

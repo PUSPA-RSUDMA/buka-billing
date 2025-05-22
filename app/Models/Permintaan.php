@@ -14,8 +14,10 @@ class Permintaan extends Model
     protected static function booted()
     {
         static::creating(function ($permintaan) {
-            if (auth()->check()) {
+            if (auth()->user()->hasRole('user')) {
                 $permintaan->created_by = auth()->id();
+            }else{
+                $permintaan->created_by = request()->created_by;
             }
         });
     }

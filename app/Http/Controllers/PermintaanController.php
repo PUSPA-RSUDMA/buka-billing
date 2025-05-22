@@ -7,6 +7,7 @@ use App\Models\Alasan;
 use App\Models\Permintaan;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class PermintaanController extends Controller
 {
@@ -42,8 +43,9 @@ class PermintaanController extends Controller
     public function create()
     {
         $alasans = Alasan::all();
+        $users =  User::role('user')->get();
 
-        return view('permintaan.create', compact('alasans'));
+        return view('permintaan.create', compact('alasans', 'users'));
     }
 
     public function store(Request $request)
@@ -52,6 +54,7 @@ class PermintaanController extends Controller
             'no_register' => 'required|string',
             'perubahan' => 'required|string',
             'alasan_id' => 'required|exists:alasans,id',
+            'created_by' => Rule::requiredIf($request->user()->hasRole('admin'))
         ]);
 
         Permintaan::create($request->all());
