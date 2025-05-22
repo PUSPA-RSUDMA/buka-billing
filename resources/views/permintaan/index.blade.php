@@ -68,7 +68,7 @@
                                     <td>
                                         @php
                                             $btnClass = match ($permintaan->status) {
-                                                'baru' => 'btn-info',
+                                                'baru' => 'btn-primary',
                                                 'proses' => 'btn-warning',
                                                 default => 'btn-success',
                                             };
