@@ -16,7 +16,7 @@ class Permintaan extends Model
         static::creating(function ($permintaan) {
             if (auth()->user()->hasRole('user')) {
                 $permintaan->created_by = auth()->id();
-            }else{
+            } else {
                 $permintaan->created_by = request()->created_by;
             }
         });
@@ -32,7 +32,8 @@ class Permintaan extends Model
         return $this->belongsTo(User::class, 'created_by');
     }
 
-    public function getStatusLabelAttribute(){
+    public function getStatusLabelAttribute()
+    {
         return StatusEnum::label($this->status);
     }
 }
