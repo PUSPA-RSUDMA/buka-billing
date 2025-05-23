@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Permintaan extends Model
 {
@@ -35,5 +36,16 @@ class Permintaan extends Model
     public function getStatusLabelAttribute()
     {
         return StatusEnum::label($this->status);
+    }
+
+    public static function getJumlahPerRuangan()
+    {
+        return DB::select('
+            select a.label as alasan, u.name as ruangan, count(p.id) as jumlah 
+            from permintaans p 
+            inner join alasans a on p.alasan_id=a.id
+            inner join users u on p.created_by=u.id
+            group by name, alasan
+        ');
     }
 }
