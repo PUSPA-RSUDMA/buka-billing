@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Alasan;
-use App\Models\Permintaan;
-use App\Models\User;
-use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
@@ -15,5 +12,4 @@ class DashboardController extends Controller
 
         return view('dashboard', compact('alasans'));
     }
-
 }

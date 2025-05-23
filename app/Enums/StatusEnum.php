@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum StatusEnum : string
+enum StatusEnum: string
 {
     case BARU = 'baru';
     case PROSES = 'proses';

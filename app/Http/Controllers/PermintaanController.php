@@ -14,7 +14,7 @@ class PermintaanController extends Controller
     public function index()
     {
         $alasans = Alasan::all();
-        $admins =  User::role('admin')->get();
+        $admins = User::role('admin')->get();
 
         $q = Permintaan::with('alasan');
 
@@ -43,7 +43,7 @@ class PermintaanController extends Controller
     public function create()
     {
         $alasans = Alasan::all();
-        $users =  User::role('user')->get();
+        $users = User::role('user')->get();
 
         return view('permintaan.create', compact('alasans', 'users'));
     }
@@ -54,7 +54,7 @@ class PermintaanController extends Controller
             'no_register' => 'required|string',
             'perubahan' => 'required|string',
             'alasan_id' => 'required|exists:alasans,id',
-            'created_by' => Rule::requiredIf($request->user()->hasRole('admin'))
+            'created_by' => Rule::requiredIf($request->user()->hasRole('admin')),
         ]);
 
         Permintaan::create($request->all());
@@ -82,6 +82,7 @@ class PermintaanController extends Controller
     {
         $permintaan = Permintaan::findOrFail($id);
         $permintaan->delete();
+
         return redirect()->route('permintaan.index');
     }
 
