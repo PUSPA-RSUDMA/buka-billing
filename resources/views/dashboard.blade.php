@@ -18,26 +18,24 @@
         </div>
         <div>
             <h3>Ruangan</h3>
-            <div class="grid gap-4">
-                <table class="table table-sm">
-                    <thead>
+            <table class="table table-sm border rounde">
+                <thead>
+                    <tr>
+                        <th>Ruangan</th>
+                        <th>Revisi</th>
+                        <th>Jumlah</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($jumlah_permintaan_by_ruangan as $j)
                         <tr>
-                            <th>Ruangan</th>
-                            <th>Revisi</th>
-                            <th>Jumlah</th>
+                            <td>{{ $j->ruangan }}</td>
+                            <td>{{ $j->alasan }}</td>
+                            <td>{{ $j->jumlah }}</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($jumlah_permintaan_by_ruangan as $j)
-                            <tr>
-                                <td>{{$j->ruangan}}</td>
-                                <td>{{$j->alasan}}</td>
-                                <td>{{$j->jumlah}}</td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
 </x-layouts.app>
