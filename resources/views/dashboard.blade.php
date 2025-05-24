@@ -29,7 +29,7 @@
                     </thead>
                     <tbody>
                         @forelse ($jumlah_permintaan_by_ruangan as $j)
-                            <tr class="border-b hover:bg-gray-100">
+                            <tr class="hover:bg-gray-100">
                                 <td class="">{{ $j->ruangan }}</td>
                                 <td class="">{{ $j->alasan }}</td>
                                 <td class="">{{ $j->jumlah }}</td>
