@@ -35,6 +35,10 @@
                     <span>Status</span>
                 </label>
 
+                <div class="col-span-2 md:col-span-1">
+                    <a href="{{ route('permintaan.index') }}" class="btn btn-sm btn-outline btn-block">Reset Filter</a>
+                </div>
+
                 {{-- <button type="submit" class="btn btn-square btn-primary"><i class="ti ti-search text-xl"></i></button> --}}
             </form>
             <div class="card-actions justify-end">
