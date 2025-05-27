@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\StatusEnum;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class Permintaan extends Model
 {
@@ -38,14 +39,51 @@ class Permintaan extends Model
         return StatusEnum::label($this->status);
     }
 
-    public static function getJumlahPerRuangan()
+    public static function getJumlahPerRuangan($tanggalPermintaan = null)
     {
-        return DB::select('
-            select a.label as alasan, u.name as ruangan, count(p.id) as jumlah 
-            from permintaans p 
-            inner join alasans a on p.alasan_id=a.id
-            inner join users u on p.created_by=u.id
-            group by name, alasan
-        ');
+        $query = Permintaan::select(
+                'alasans.label as alasan',
+                'users.name as ruangan',
+                DB::raw('COUNT(permintaans.id) as jumlah')
+            )
+            ->join('alasans', 'permintaans.alasan_id', '=', 'alasans.id')
+            ->join('users', 'permintaans.created_by', '=', 'users.id')
+            ->groupBy('users.name', 'alasans.label');
+
+        if ($tanggalPermintaan) {
+            $query->whereDate('permintaans.created_at', $tanggalPermintaan);
+        }
+
+        return $query->get();
+    }
+
+    public static function getJumlahAktivitas($tanggalPermintaan = null)
+    {
+        $user = auth()->user();
+
+        $query = Permintaan::select('status', DB::raw('COUNT(id) as jumlah'))
+            ->groupBy('status')
+            ->orderBy('status');
+
+        if ($user->hasRole('user')) {
+            $query->where('created_by', $user->id);
+        }
+
+        if ($tanggalPermintaan) {
+            $query->whereDate('created_at', $tanggalPermintaan);
+        }
+
+        $results = $query->get();
+
+        $data = [
+            'baru' => 0,
+            'proses' => 0,
+        ];
+
+        foreach ($results as $item) {
+            $data[$item->status] = $item->jumlah;
+        }
+
+        return $data;
     }
 }

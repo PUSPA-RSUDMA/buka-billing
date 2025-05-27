@@ -1,9 +1,48 @@
 <x-layouts.app title="Dashboard" heading="Dashboard">
 
-    <div class="grid gap-10 md:grid-cols-2">
+    <div class="flex flex-col justify-between gap-4 md:flex-row">
+        <form action="" method="get" class="grid grid-cols-2 gap-4 md:grid-cols-6">
+            <label class="floating-label">
+                <input
+                    type="date"
+                    class="input input-sm"
+                    name="tanggal"
+                    value="{{ $filtered_date }}"
+                    onchange="this.form.submit()"
+                >
+                <span>Tanggal</span>
+            </label>
 
-        <!-- Total Card Section -->
+            <div class="col-span-2 md:col-span-1 mb-4">
+                <a
+                    href="{{ route('dashboard', ['tanggal' => '']) }}"
+                    class="btn btn-sm btn-outline btn-block"
+                >
+                    Reset Filter
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <div class="grid gap-10 md:grid-cols-2">
+        <!-- Aktifitas Card Section -->
         <div class="card border p-4 gap-4">
+            <h3 class="text-lg"> Aktivitas </h3>
+            <div class="grid gap-4 grid-cols-3">
+                <a href="{{ route('permintaan.index', ["tanggal" => $filtered_date, "status" => 'baru']) }}">
+                    <div class="bg-red-50 rounded-lg p-4 flex flex-col items-center shadow-sm">
+                        <span class="text-sm text-gray-500">Baru</span>
+                        <span class="text-2xl font-bold text-red-600">{{ $jumlah_aktivitas['baru'] }}</span>
+                    </div>
+                </a>
+                <a href="{{ route('permintaan.index', ["tanggal" => $filtered_date, "status" => 'proses']) }}">
+                    <div class="bg-yellow-50 rounded-lg p-4 flex flex-col items-center shadow-sm">
+                        <span class="text-sm text-gray-500">Sudah dibuka</span>
+                        <span class="text-2xl font-bold text-yellow-600">{{ $jumlah_aktivitas['proses'] }}</span>
+                    </div>
+                </a>
+            </div>
+            <!-- Total Card Section -->
             <h3 class="text-lg"> Total Permintaan </h3>
             <div class="grid gap-4 grid-cols-3">
                 @foreach ($alasans as $alasan)
