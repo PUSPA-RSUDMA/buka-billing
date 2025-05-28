@@ -29,13 +29,13 @@
         <div class="card border p-4 gap-4">
             <h3 class="text-lg"> Aktivitas </h3>
             <div class="grid gap-4 grid-cols-3">
-                <a href="{{ route('permintaan.index', ["tanggal" => $filtered_date, "status" => 'baru']) }}">
+                <a href="{{ route('permintaan.index', ["tanggal" => $filtered_date, "status" => 'baru']) }}" wire:navigate>
                     <div class="bg-red-50 rounded-lg p-4 flex flex-col items-center shadow-sm">
                         <span class="text-sm text-gray-500">Baru</span>
                         <span class="text-2xl font-bold text-red-600">{{ $jumlah_aktivitas['baru'] }}</span>
                     </div>
                 </a>
-                <a href="{{ route('permintaan.index', ["tanggal" => $filtered_date, "status" => 'proses']) }}">
+                <a href="{{ route('permintaan.index', ["tanggal" => $filtered_date, "status" => 'proses']) }}" wire:navigate>
                     <div class="bg-yellow-50 rounded-lg p-4 flex flex-col items-center shadow-sm">
                         <span class="text-sm text-gray-500">Dibuka</span>
                         <span class="text-2xl font-bold text-yellow-600">{{ $jumlah_aktivitas['proses'] }}</span>
