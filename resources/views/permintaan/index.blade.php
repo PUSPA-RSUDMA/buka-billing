@@ -49,7 +49,7 @@
         <div class="card border">
             <div class="card-body p-0">
                 <div class="overflow-x-auto rounded-lg">
-                    <table class="table table-sm border-b">
+                    <table class="table table-sm">
                         <thead>
                             <tr class="bg-base-200">
                                 <th class="w-4">No</th>
